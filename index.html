@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Culture Wrapped Kota - East London</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui,sans-serif;margin:0}
+body{background:#fff7ed;padding-bottom:90px}
+header{background:#ea580c;color:white;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
+header b{font-size:22px}
+header p{font-size:13px;opacity:.9}
+.banner{background:#111;color:white;margin:12px;padding:16px;border-radius:16px;text-align:center}
+.banner b{font-size:20px;color:#fbbf24}
+.card{background:white;margin:12px;padding:14px;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:12px;background:#fed7aa;display:flex;align-items:center;justify-content:center;font-size:50px}
+.price{font-weight:800;font-size:18px;color:#ea580c}
+.btn{width:100%;background:#ea580c;color:white;border:0;padding:13px;border-radius:12px;font-weight:700;font-size:16px;margin-top:10px;cursor:pointer}
+.btn2{background:#111}
+input,select{width:100%;padding:12px;margin:6px 0;border:1.5px solid #ddd;border-radius:12px}
+.badge{background:#22c55e;color:white;padding:3px 9px;border-radius:20px;font-size:12px}
+.cart{position:fixed;bottom:0;left:0;right:0;background:#111;color:white;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:700}
+</style>
+</head>
+<body>
+
+<header><b>🌯 CULTURE WRAPPED KOTA</b><p>East London • Pickup & Delivery</p></header>
+
+<div class="banner">
+<b>🔥 HOT & FRESH IN EAST LONDON</b><br>
+Order in 30 secs • Delivered to your door<br>
+<span style="font-size:13px">📍 East London • 🛵 Delivery Available</span>
+</div>
+
+<div class="card">
+<b>📍 Delivery or Pickup?</b>
+<select id="orderType" onchange="updateTotal()">
+<option value="delivery">🛵 Delivery - East London</option>
+<option value="pickup">🏃 Pickup - Come Collect</option>
+</select>
+<input id="custName" placeholder="Your Name e.g. Thandi">
+<input id="custPhone" placeholder="Your Phone / WhatsApp">
+<input id="custAddress" placeholder="Delivery Address e.g. Mdantsane, Unit 3">
+</div>
+
+<div class="card">
+<div style="font-size:50px;text-align:center">🌯</div>
+<b>Classic Kota</b> <span class="badge">BEST SELLER</span><br>
+<span style="color:#666;font-size:14px">Chips, Polony, Cheese, Atchar</span><br>
+<span class="price">R45</span><br>
+<button class="btn" onclick="addToCart('Classic Kota',45)">+ Add to Order</button>
+</div>
+
+<div class="card">
+<div style="font-size:50px;text-align:center">🧀</div>
+<b>Cheesy Kota</b><br>
+<span style="color:#666;font-size:14px">Extra Cheese, Chips, Polony, Atchar, Sauce</span><br>
+<span class="price">R60</span><br>
+<button class="btn" onclick="addToCart('Cheesy Kota',60)">+ Add to Order</button>
+</div>
+
+<div class="card">
+<div style="font-size:50px;text-align:center">🌭</div>
+<b>Russian Kota</b><br>
+<span style="color:#666;font-size:14px">Russian, Chips, Cheese, Egg, Atchar</span><br>
+<span class="price">R70</span><br>
+<button class="btn" onclick="addToCart('Russian Kota',70)">+ Add to Order</button>
+</div>
+
+<div class="card">
+<div style="font-size:50px;text-align:center">🍔</div>
+<b>Full House Kota</b><br>
+<span style="color:#666;font-size:14px">Russian, Polony, Egg, Cheese, Chips, Atchar, Extra Sauce</span><br>
+<span class="price">R85</span><br>
+<button class="btn" onclick="addToCart('Full House Kota',85)">+ Add to Order</button>
+</div>
+
+<div class="card">
+<div style="font-size:50px;text-align:center">🥤</div>
+<b>Add a Drink</b><br>
+<span style="color:#666;font-size:14px">Coke, Fanta, Sprite - 500ml</span><br>
+<span class="price">R20</span><br>
+<button class="btn btn2" onclick="addToCart('Drink 500ml',20)">+ Add Drink</button>
+</div>
+
+<div class="card" id="orderSummary">
+<b>🧾 Your Order</b>
+<p id="cartItems" style="color:#666;font-size:14px;margin-top:8px">No items yet. Add a kota above.</p>
+<p style="margin-top:10px"><b>Total: R<span id="total">0</span></b></p>
+<button class="btn" style="background:#22c55e" onclick="placeOrder()">📲 Order on WhatsApp</button>
+<p style="font-size:12px;color:#888;text-align:center;margin-top:8px">Order goes straight to Wrapped Kota WhatsApp</p>
+</div>
+
+<div class="cart">
+<span>🛒 <span id="cartCount">0</span> items</span>
+<span>R<span id="cartTotal">0</span></span>
+</div>
+
+<script>
+let cart = [];
+let total = 0;
+function addToCart(name, price){
+  cart.push({name, price});
+  total += price;
+  updateCart();
+  alert(name + ' added! Total: R' + total);
+}
+function updateCart(){
+  document.getElementById('cartCount').textContent = cart.length;
+  document.getElementById('cartTotal').textContent = total;
+  document.getElementById('total').textContent = total;
+  if(cart.length > 0){
+    document.getElementById('cartItems').innerHTML = cart.map(i => '• ' + i.name + ' - R' + i.price).join('<br>');
+  }
+}
+function placeOrder(){
+  const name = document.getElementById('custName').value;
+  const phone = document.getElementById('custPhone').value;
+  const address = document.getElementById('custAddress').value;
+  const type = document.getElementById('orderType').value;
+  if(cart.length === 0){ alert('Add a kota first'); return; }
+  if(!name || !phone){ alert('Please add your Name and Phone'); return; }
+  let msg = 'Hi Culture Wrapped Kota! New Order:%0A%0A';
+  cart.forEach(i => msg += '• ' + i.name + ' - R' + i.price + '%0A');
+  msg += '%0A*Total: R' + total + '*%0A';
+  msg += 'Name: ' + name + '%0A';
+  msg += 'Phone: ' + phone + '%0A';
+  msg += 'Type: ' + type + '%0A';
+  if(type === 'delivery') msg += 'Address: ' + address;
+  window.open('https://wa.me/27699623309?text=' + msg, '_blank');
+}
+</script>
+</body>
+                 </html>
